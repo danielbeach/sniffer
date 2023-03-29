@@ -12,3 +12,12 @@ Then `sniffer` is for you!
 `sniffer` is built with `Rust` and is made for the average 
 Data Engineering or data person who frequently need to inspect
 `csv` files quicky.
+
+### Usage
+To use `sniffer` to inspect a `flate-file` simply pass the `file-path` and `delimiter`.
+`cargo run sample.csv ,`
+This will give you output something like ...
+```
+number of lines: 3
+Headers: ["header_1", "header_2"]
+```
