@@ -14,7 +14,8 @@ Data Engineering or data person who frequently need to inspect
 `csv` files quicky.
 
 ### Usage
-To use `sniffer` to inspect a `flate-file` simply pass the `file-path` and `delimiter`.
+To use `sniffer` to inspect a `flate-file` 
+simply pass the `file-path` and `delimiter`.
 `cargo run sample.csv ,`
 This will give you output something like ...
 ```
