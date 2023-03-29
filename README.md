@@ -1,6 +1,6 @@
 ## sniffer
 
-![alt text](imgs/sniff.png?raw=true=300x373)
+<img src="https://github.com/danielbeach/sniffer/blob/0ca48931cacf052ad3bce881f6e2847c58e0f97c/imgs/sniff.png" width="300">
 
 `sniffer` is a tool to quickly inspect `csv` and `flat-file` files.
 
