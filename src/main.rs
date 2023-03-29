@@ -7,4 +7,5 @@ fn main() {
     let lines = sniffer::read_number_lines_in_file(&file_path);
     println!("number of lines: {}", lines);
     sniffer::print_headers(&file_path, &delimiter);
+    sniffer::print_a_few_lines(&file_path, &delimiter, 3);
 }
