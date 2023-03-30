@@ -1,4 +1,4 @@
-use std::io::{BufRead, BufReader};
+use std::{io::{BufRead, BufReader}, fs};
 
 
 pub fn read_number_lines_in_file(file_path: &str) -> u32 {
@@ -66,4 +66,11 @@ pub fn print_a_few_lines(file_path: &str, delimiter: &str, &quote: &u32, number_
             break;
         }
     }
+}
+
+pub fn get_file_size_in_mb(file_path: &str) ->f64 {
+    let metadata = fs::metadata(file_path).expect("Error reading file metadata");
+    let file_size = metadata.len() as f64;
+    let mb_size = file_size / (1024.0 * 1024.0);
+    mb_size
 }

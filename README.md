@@ -13,6 +13,12 @@ Then `sniffer` is for you!
 Data Engineering or data person who frequently need to inspect
 `csv` files quicky.
 
+The follow data is displayed about a `flat file` by default.
+- file size in `mb`.
+- number of `lines` per file.
+- `header` row is displayed.
+- First few `rows` are printed.
+
 ### Usage
 ```
 Usage: sniffer [OPTIONS] --file-path <FILE_PATH> --delimiter <DELIMITER>
@@ -30,6 +36,7 @@ simply pass the `file-path` and `delimiter`.
 `cargo run -- --file-path 202302-divvy-tripdata.csv  --delimiter , --quote 1`
 This will give you output something like ...
 ```
+File size in MB: 0.0010251998901367188
 number of lines: 5
 Headers: ["ride_id", "rideable_type", "started_at", "ended_at", "start_station_name", "start_station_id", "end_station_name", "end_station_id", "start_lat", "start_lng", "end_lat", "end_lng", "member_casual"]
 

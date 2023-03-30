@@ -24,6 +24,8 @@ fn main() {
     let quote = args.quote;
 
     let lines = sniffer::read_number_lines_in_file(&file_path);
+    let size_in_mb = sniffer::get_file_size_in_mb(&file_path);
+    println!("File size in MB: {}", size_in_mb);
     println!("number of lines: {}", lines);
     sniffer::print_headers(&file_path, &delimiter, &quote);
     sniffer::print_a_few_lines(&file_path, &delimiter, &quote, 3);
