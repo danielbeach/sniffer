@@ -16,7 +16,7 @@ Data Engineering or data person who frequently need to inspect
 ### Usage
 To use `sniffer` to inspect a `flate-file` 
 simply pass the `file-path` and `delimiter`.
-`cargo run sample.csv ,`
+`cargo run -- --file-path 202302-divvy-tripdata.csv  --delimiter ,`
 This will give you output something like ...
 ```
 number of lines: 3
