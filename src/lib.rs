@@ -29,6 +29,7 @@ pub fn print_headers(file_path: &str, delimiter: &str, &quote: &u32) {
         if quote == 1 {
             let line = remove_quotes(&line);
             println!("Headers: {:?}", split_line(&line, delimiter));
+            println!("{}", "");
             break;
         }
         println!("Headers: {:?}", &line);
@@ -51,6 +52,7 @@ pub fn print_a_few_lines(file_path: &str, delimiter: &str, &quote: &u32, number_
         if quote == 1 {
             let line = remove_quotes(&line);
             println!("Row: {:?}", split_line(&line, delimiter));
+            println!("{}", "");
             count += 1;
             if count == number_of_lines {
                 break;
@@ -58,6 +60,7 @@ pub fn print_a_few_lines(file_path: &str, delimiter: &str, &quote: &u32, number_
             continue;
         }
         println!("Row: {:?}", line);
+        println!("{}", "");
         count += 1;
         if count == number_of_lines {
             break;
