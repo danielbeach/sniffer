@@ -27,11 +27,13 @@ Options:
 
 To use `sniffer` to inspect a `flat-file` 
 simply pass the `file-path` and `delimiter`.
-`cargo run -- --file-path 202302-divvy-tripdata.csv  --delimiter ,`
+`cargo run -- --file-path 202302-divvy-tripdata.csv  --delimiter , --quote 1`
 This will give you output something like ...
 ```
-number of lines: 3
-Headers: ["header_1", "header_2"]
-Row: "1,2"
-Row: "3,4"
+number of lines: 5
+Headers: ["ride_id", "rideable_type", "started_at", "ended_at", "start_station_name", "start_station_id", "end_station_name", "end_station_id", "start_lat", "start_lng", "end_lat", "end_lng", "member_casual"]
+
+Row: ["CBCD0D7777F0E45F", "classic_bike", "2023-02-14 11:59:42", "2023-02-14 12:13:38", "Southport Ave & Clybourn Ave", "TA1309000030", "Clark St & Schiller St", "TA1309000024", "41.920771", "-87.663712", "41.907993", "-87.631501", "casual"]
+
+Row: ["F3EC5FCE5FF39DE9", "electric_bike", "2023-02-15 13:53:48", "2023-02-15 13:59:08", "Clarendon Ave & Gordon Ter", "13379", "Sheridan Rd & Lawrence Ave", "TA1309000041", "41.957879424", "-87.649583697", "41.969517", "-87.654691", "casual"]
 ```
