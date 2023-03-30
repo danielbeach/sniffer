@@ -14,7 +14,18 @@ Data Engineering or data person who frequently need to inspect
 `csv` files quicky.
 
 ### Usage
-To use `sniffer` to inspect a `flate-file` 
+```
+Usage: sniffer [OPTIONS] --file-path <FILE_PATH> --delimiter <DELIMITER>
+
+Options:
+      --file-path <FILE_PATH>  
+      --delimiter <DELIMITER>  
+      --quote <QUOTE>          [default: 0]
+  -h, --help                   Print help
+  -V, --version                Print version
+  ```
+
+To use `sniffer` to inspect a `flat-file` 
 simply pass the `file-path` and `delimiter`.
 `cargo run -- --file-path 202302-divvy-tripdata.csv  --delimiter ,`
 This will give you output something like ...
