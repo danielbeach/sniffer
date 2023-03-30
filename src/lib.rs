@@ -1,5 +1,6 @@
 use std::io::{BufRead, BufReader};
 
+
 pub fn read_number_lines_in_file(file_path: &str) -> u32 {
     let mut count = 0;
     let file = std::fs::File::open(file_path).unwrap();
