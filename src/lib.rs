@@ -77,24 +77,23 @@ pub fn check_all_column_for_nulls(file_path: &str, delimiter: &str, &quote: &u32
     let bf: BufReader<fs::File> = BufReader::new(file);
     let mut rdr = csv::ReaderBuilder::new()
         .delimiter(if delimiter == "," { b',' } else { b'\t' })
-        .double_quote(if quote == 1 { true } else { false })
+        .double_quote(match quote == 1 {
+            true => true,
+            false => false,
+        })
         .from_reader(bf);
     let mut columns_with_nulls: Vec<String> = Vec::new();
     for result in rdr.records() {
         let record: csv::StringRecord = result.unwrap();
         for field in record.iter() {
-            match field {
-                "" => {
-                    columns_with_nulls.push(String::from(field));
-                }
-                _ => {}
+            if field.is_empty() {
+                columns_with_nulls.push(String::from(field));
             }
         }
     }
-    if columns_with_nulls.len() > 0 {
+    if !columns_with_nulls.is_empty() {
         println!("Found columns with NULL values: {:?}", columns_with_nulls);
     } else {
         println!("No columns with nulls");
     }
 }
-   
