@@ -18,6 +18,8 @@ The follow data is displayed about a `flat file` by default.
 - number of `lines` per file.
 - `header` row is displayed.
 - First few `rows` are printed.
+- Option to indciate of flat-file is quoted.
+- Option to check all columns for `NULL` values.
 
 ### Usage
 ```
@@ -27,13 +29,14 @@ Options:
       --file-path <FILE_PATH>
       --delimiter <DELIMITER>
       --quote <QUOTE>          [default: 0]
+      --check-nulls <CHECK_NULLS>  [default: 0]
   -h, --help                   Print help
   -V, --version                Print version
   ```
 
 To use `sniffer` to inspect a `flat-file`
 simply pass the `file-path` and `delimiter`.
-`cargo run -- --file-path sample.csv  --delimiter , --quote 1`
+`cargo run -- --file-path sample.csv  --delimiter , --quote 1 --check-nulls 1`
 This will give you output something like ...
 ```
 File size in MB: 0.0010251998901367188
@@ -43,6 +46,8 @@ Headers: ["ride_id", "rideable_type", "started_at", "ended_at", "start_station_n
 Row: ["CBCD0D7777F0E45F", "classic_bike", "2023-02-14 11:59:42", "2023-02-14 12:13:38", "Southport Ave & Clybourn Ave", "TA1309000030", "Clark St & Schiller St", "TA1309000024", "41.920771", "-87.663712", "41.907993", "-87.631501", "casual"]
 
 Row: ["F3EC5FCE5FF39DE9", "electric_bike", "2023-02-15 13:53:48", "2023-02-15 13:59:08", "Clarendon Ave & Gordon Ter", "13379", "Sheridan Rd & Lawrence Ave", "TA1309000041", "41.957879424", "-87.649583697", "41.969517", "-87.654691", "casual"]
+
+No columns with nulls
 ```
 
 ## Testing and CI

@@ -30,7 +30,10 @@ pub fn print_headers(file_path: &str, delimiter: &str, &quote: &u32) {
         println!("Headers: {:?}", split_line(&line, delimiter));
         println!(" ");
     }
-    println!("Headers: {:?}", &line);
+    if quote == 0 {
+        println!("Headers: {:?}", line);
+        println!(" ");
+    }
 }
 
 pub fn print_a_few_lines(file_path: &str, delimiter: &str, &quote: &u32, number_of_lines: u32) {
@@ -69,3 +72,29 @@ pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     let mb_size: f64 = file_size / (1024.0 * 1024.0);
     mb_size
 }
+pub fn check_all_column_for_nulls(file_path: &str, delimiter: &str, &quote: &u32) {
+    let file: fs::File = std::fs::File::open(file_path).unwrap();
+    let bf: BufReader<fs::File> = BufReader::new(file);
+    let mut rdr = csv::ReaderBuilder::new()
+        .delimiter(if delimiter == "," { b',' } else { b'\t' })
+        .double_quote(if quote == 1 { true } else { false })
+        .from_reader(bf);
+    let mut columns_with_nulls: Vec<String> = Vec::new();
+    for result in rdr.records() {
+        let record: csv::StringRecord = result.unwrap();
+        for field in record.iter() {
+            match field {
+                "" => {
+                    columns_with_nulls.push(String::from(field));
+                }
+                _ => {}
+            }
+        }
+    }
+    if columns_with_nulls.len() > 0 {
+        println!("Found columns with NULL values: {:?}", columns_with_nulls);
+    } else {
+        println!("No columns with nulls");
+    }
+}
+   
