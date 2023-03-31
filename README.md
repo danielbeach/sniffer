@@ -33,7 +33,7 @@ Options:
 
 To use `sniffer` to inspect a `flat-file` 
 simply pass the `file-path` and `delimiter`.
-`cargo run -- --file-path 202302-divvy-tripdata.csv  --delimiter , --quote 1`
+`cargo run -- --file-path sample.csv  --delimiter , --quote 1`
 This will give you output something like ...
 ```
 File size in MB: 0.0010251998901367188
