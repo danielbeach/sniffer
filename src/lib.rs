@@ -14,12 +14,11 @@ pub fn read_number_lines_in_file(file_path: &str) -> u32 {
 }
 
 fn remove_quotes(input: &str) -> String {
-    input.replace("\"", "")
+    input.replace('\"', "")
 }
 
 fn split_line<'a>(line: &'a str, delimiter: &'a str) -> Vec<&'a str> {
-    let line: &Vec<&str> = &line.split(delimiter).collect::<Vec<&str>>();
-    return line.to_vec();
+    return (line.split(delimiter).collect::<Vec<&str>>()).to_vec();
 }
 
 pub fn print_headers(file_path: &str, delimiter: &str, &quote: &u32) {
@@ -29,11 +28,10 @@ pub fn print_headers(file_path: &str, delimiter: &str, &quote: &u32) {
     if quote == 1 {
         let line: String = remove_quotes(&line);
         println!("Headers: {:?}", split_line(&line, delimiter));
-        println!("{}", "");
+        println!(" ");
     }
     println!("Headers: {:?}", &line);
 }
-
 
 pub fn print_a_few_lines(file_path: &str, delimiter: &str, &quote: &u32, number_of_lines: u32) {
     let file: fs::File = std::fs::File::open(file_path).unwrap();
@@ -49,7 +47,7 @@ pub fn print_a_few_lines(file_path: &str, delimiter: &str, &quote: &u32, number_
         if quote == 1 {
             let line: String = remove_quotes(&line);
             println!("Row: {:?}", split_line(&line, delimiter));
-            println!("{}", "");
+            println!(" ");
             count += 1;
             if count == number_of_lines {
                 break;
@@ -57,7 +55,7 @@ pub fn print_a_few_lines(file_path: &str, delimiter: &str, &quote: &u32, number_
             continue;
         }
         println!("Row: {:?}", line);
-        println!("{}", "");
+        println!(" ");
         count += 1;
         if count == number_of_lines {
             break;

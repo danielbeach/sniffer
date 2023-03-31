@@ -9,7 +9,7 @@ Want to see the first few rows printed out to your terminal?
 
 Then `sniffer` is for you!
 
-`sniffer` is built with `Rust` and is made for the average 
+`sniffer` is built with `Rust` and is made for the average
 Data Engineering or data person who frequently need to inspect
 `csv` files quicky.
 
@@ -24,14 +24,14 @@ The follow data is displayed about a `flat file` by default.
 Usage: sniffer [OPTIONS] --file-path <FILE_PATH> --delimiter <DELIMITER>
 
 Options:
-      --file-path <FILE_PATH>  
-      --delimiter <DELIMITER>  
+      --file-path <FILE_PATH>
+      --delimiter <DELIMITER>
       --quote <QUOTE>          [default: 0]
   -h, --help                   Print help
   -V, --version                Print version
   ```
 
-To use `sniffer` to inspect a `flat-file` 
+To use `sniffer` to inspect a `flat-file`
 simply pass the `file-path` and `delimiter`.
 `cargo run -- --file-path sample.csv  --delimiter , --quote 1`
 This will give you output something like ...
@@ -44,3 +44,7 @@ Row: ["CBCD0D7777F0E45F", "classic_bike", "2023-02-14 11:59:42", "2023-02-14 12:
 
 Row: ["F3EC5FCE5FF39DE9", "electric_bike", "2023-02-15 13:53:48", "2023-02-15 13:59:08", "Clarendon Ave & Gordon Ter", "13379", "Sheridan Rd & Lawrence Ave", "TA1309000041", "41.957879424", "-87.649583697", "41.969517", "-87.654691", "casual"]
 ```
+
+## Testing and CI
+To run `pre-commit` checks ...
+`pre-commit run --all-files`
