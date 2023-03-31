@@ -1,5 +1,7 @@
-use std::{io::{BufRead, BufReader}, fs};
-
+use std::{
+    fs,
+    io::{BufRead, BufReader},
+};
 
 pub fn read_number_lines_in_file(file_path: &str) -> u32 {
     let mut count: u32 = 0;
@@ -23,17 +25,13 @@ fn split_line<'a>(line: &'a str, delimiter: &'a str) -> Vec<&'a str> {
 pub fn print_headers(file_path: &str, delimiter: &str, &quote: &u32) {
     let file: fs::File = std::fs::File::open(file_path).unwrap();
     let bf: BufReader<fs::File> = BufReader::new(file);
-    for line in bf.lines() {
-        let line: String = line.unwrap();
-        if quote == 1 {
-            let line: String = remove_quotes(&line);
-            println!("Headers: {:?}", split_line(&line, delimiter));
-            println!("{}", "");
-            break;
-        }
-        println!("Headers: {:?}", &line);
-        break;
+    let line: String = bf.lines().next().unwrap().unwrap();
+    if quote == 1 {
+        let line: String = remove_quotes(&line);
+        println!("Headers: {:?}", split_line(&line, delimiter));
+        println!("{}", "");
     }
+    println!("Headers: {:?}", &line);
 }
 
 
@@ -67,7 +65,7 @@ pub fn print_a_few_lines(file_path: &str, delimiter: &str, &quote: &u32, number_
     }
 }
 
-pub fn get_file_size_in_mb(file_path: &str) ->f64 {
+pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     let metadata: fs::Metadata = fs::metadata(file_path).expect("Error reading file metadata");
     let file_size: f64 = metadata.len() as f64;
     let mb_size: f64 = file_size / (1024.0 * 1024.0);
