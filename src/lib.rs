@@ -1,9 +1,4 @@
-use std::{
-    fs,
-    io::{ BufReader},
-};
-use csv;
-
+use std::{fs, io::BufReader};
 
 pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     let metadata: fs::Metadata = fs::metadata(file_path).expect("Error reading file metadata");
@@ -37,7 +32,6 @@ pub fn check_all_column_for_nulls(file_path: &str, delimiter: &str, &quote: &u32
     }
 }
 
-
 pub fn print_headers_few_lines_and_line_count(file_path: &str, delimiter: &str, &quote: &u32) {
     let file: fs::File = std::fs::File::open(file_path).unwrap();
     let bf: BufReader<fs::File> = BufReader::new(file);
@@ -61,5 +55,4 @@ pub fn print_headers_few_lines_and_line_count(file_path: &str, delimiter: &str, 
         count += 1;
     }
     println!("number of lines: {}", count);
-    
 }
