@@ -15,8 +15,11 @@ struct Args {
     #[arg(long, default_value_t = 0)]
     quote: u32,
 
-    #[arg(long, default_value_t = 0)]
+    #[arg(long, default_value_t = 1)]
     check_nulls: u32,
+
+    #[arg(long, default_value_t = 1)]
+    check_whitespace: u32,
 }
 
 fn main() {
@@ -26,10 +29,11 @@ fn main() {
     let delimiter = args.delimiter;
     let quote = args.quote;
     let check_nulls = args.check_nulls;
+    let check_whitespace = args.check_whitespace;
 
     sniffer::print_headers_few_lines_and_line_count(&file_path, &delimiter, &quote);
     if check_nulls == 1 {
-        sniffer::check_all_column_for_nulls(&file_path, &delimiter, &quote);
+        sniffer::check_all_column_for_nulls_and_whitespace(&file_path, &delimiter, &quote, &check_whitespace);
     }
     let size_in_mb = sniffer::get_file_size_in_mb(&file_path);
     println!("File size in MB: {}", size_in_mb);

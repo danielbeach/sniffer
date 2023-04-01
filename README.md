@@ -20,6 +20,7 @@ The follow data is displayed about a `flat file` by default.
 - First few `rows` are printed.
 - Option to indciate of flat-file is quoted.
 - Option to check all columns for `NULL` values.
+- Option to check for whitespace and beginning and end of columns.
 
 ### Usage
 ```
@@ -29,7 +30,8 @@ Options:
       --file-path <FILE_PATH>
       --delimiter <DELIMITER>
       --quote <QUOTE>          [default: 0]
-      --check-nulls <CHECK_NULLS>  [default: 0]
+      --check-nulls <CHECK_NULLS>            [default: 1]
+      --check-whitespace <CHECK_WHITESPACE>  [default: 1]
   -h, --help                   Print help
   -V, --version                Print version
   ```
@@ -49,6 +51,7 @@ Headers: StringRecord(["ride_id", "rideable_type", "started_at", "ended_at", "st
 
 number of lines: 4
 No columns with nulls
+No columns with whitespace at beginning or end
 File size in MB: 0.001027107238769531
 ```
 

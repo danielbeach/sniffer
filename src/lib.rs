@@ -6,10 +6,25 @@ pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     let mb_size: f64 = file_size / (1024.0 * 1024.0);
     mb_size
 }
-pub fn check_all_column_for_nulls(file_path: &str, delimiter: &str, &quote: &u32) {
+
+fn has_whitespace_at_beginning_or_end(s: &str) -> bool {
+    if let Some(c) = s.chars().next() {
+        if c.is_whitespace() {
+            return true;
+        }
+    }
+    if let Some(c) = s.chars().rev().next() {
+        if c.is_whitespace() {
+            return true;
+        }
+    }
+    false
+}
+
+pub fn check_all_column_for_nulls_and_whitespace(file_path: &str, delimiter: &str, &quote: &u32, &check_whitespace: &u32) {
     let file: fs::File = std::fs::File::open(file_path).unwrap();
     let bf: BufReader<fs::File> = BufReader::new(file);
-    let mut rdr = csv::ReaderBuilder::new()
+    let mut rdr: csv::Reader<BufReader<fs::File>> = csv::ReaderBuilder::new()
         .delimiter(if delimiter == "," { b',' } else { b'\t' })
         .double_quote(match quote == 1 {
             true => true,
@@ -17,11 +32,17 @@ pub fn check_all_column_for_nulls(file_path: &str, delimiter: &str, &quote: &u32
         })
         .from_reader(bf);
     let mut columns_with_nulls: Vec<String> = Vec::new();
+    let mut has_whitespace: Vec<bool> = Vec::new();
     for result in rdr.records() {
         let record: csv::StringRecord = result.unwrap();
         for field in record.iter() {
             if field.is_empty() {
                 columns_with_nulls.push(String::from(field));
+            }
+            if check_whitespace == 1 {
+                if has_whitespace_at_beginning_or_end(field) {
+                    has_whitespace.push(true);
+                }
             }
         }
     }
@@ -29,6 +50,14 @@ pub fn check_all_column_for_nulls(file_path: &str, delimiter: &str, &quote: &u32
         println!("Found columns with NULL values: {:?}", columns_with_nulls);
     } else {
         println!("No columns with nulls");
+    }
+    if check_whitespace == 1 {
+   
+        if has_whitespace.len() > 0 {
+            println!("Found columns with whitespace at beginning or end");
+        } else {
+            println!("No columns with whitespace at beginning or end");
+        }
     }
 }
 
