@@ -7,18 +7,31 @@ pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     mb_size
 }
 
-fn has_whitespace_at_beginning_or_end(s: &str) -> bool {
-    if let Some(c) = s.chars().next() {
-        if c.is_whitespace() {
-            return true;
-        }
+// check whitespace at beginning or end of string
+// 
+// # Arguments
+//
+// * `s` - A string slice that we want to check for whitespace at beginning or end
+//
+// # Returns
+//
+// * `Result<bool, &'static str>` - A result that is either a boolean or an error message
+fn has_whitespace_at_beginning_or_end(s: &str) -> Result<bool,&'static str> {
+
+    if s.len() == 0 {
+        return Ok(false);
     }
-    if let Some(c) = s.chars().rev().next() {
-        if c.is_whitespace() {
-            return true;
-        }
+
+    let c = s.chars().take(1).last().expect("Error getting first character");
+    if c.is_whitespace()  {
+        return Ok(true);
     }
-    false
+    let c = s.chars().rev().take(1).last().expect("Error getting last character");
+    if c.is_whitespace() {
+        return Ok(true);
+    }
+    
+    Ok(false)
 }
 
 pub fn check_all_column_for_nulls_and_whitespace(file_path: &str, delimiter: &str, &quote: &u32, &check_whitespace: &u32) {
@@ -40,7 +53,7 @@ pub fn check_all_column_for_nulls_and_whitespace(file_path: &str, delimiter: &st
                 columns_with_nulls.push(String::from(field));
             }
             if check_whitespace == 1 {
-                if has_whitespace_at_beginning_or_end(field) {
+                if has_whitespace_at_beginning_or_end(field).unwrap() {
                     has_whitespace.push(true);
                 }
             }
@@ -84,4 +97,44 @@ pub fn print_headers_few_lines_and_line_count(file_path: &str, delimiter: &str, 
         count += 1;
     }
     println!("number of lines: {}", count);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_has_whitespace_at_beginning_or_end_with_leading_space() {
+        let s: &str = "  hello";
+        let result: bool = has_whitespace_at_beginning_or_end(s).unwrap();
+        assert_eq!(result, true);
+    }
+
+    #[test]
+    fn test_has_whitespace_at_beginning_or_end_with_trailing_space() {
+        let s: &str = "hello  ";
+        let result: bool = has_whitespace_at_beginning_or_end(s).unwrap();
+        assert_eq!(result, true);
+    }
+
+    #[test]
+    fn test_has_whitespace_at_beginning_or_end_without_spaces() {
+        let s: &str = "hello";
+        let result: bool = has_whitespace_at_beginning_or_end(s).unwrap();
+        assert_eq!(result, false);
+    }
+
+    #[test]
+    fn test_has_whitespace_at_beginning_or_end_with_both_leading_and_trailing_spaces() {
+        let s: &str = "  hello  ";
+        let result: bool = has_whitespace_at_beginning_or_end(s).unwrap();
+        assert_eq!(result, true);
+    }
+
+    #[test]
+    fn test_has_whitespace_at_beginning_or_end_with_empty_string() {
+        let s: &str = "";
+        let result: bool = has_whitespace_at_beginning_or_end(s).unwrap();
+        assert_eq!(result, false);
+    }
 }
