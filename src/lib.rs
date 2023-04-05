@@ -7,7 +7,15 @@ pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     mb_size
 }
 
-
+// check whitespace at beginning or end of string
+// 
+// # Arguments
+//
+// * `s` - A string slice that we want to check for whitespace at beginning or end
+//
+// # Returns
+//
+// * `Result<bool, &'static str>` - A result that is either a boolean or an error message
 fn has_whitespace_at_beginning_or_end(s: &str) -> Result<bool,&'static str> {
 
     if s.len() == 0 {
