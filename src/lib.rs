@@ -151,4 +151,26 @@ mod tests {
         let result: bool = has_whitespace_at_beginning_or_end(s).unwrap();
         assert_eq!(result, false);
     }
+
+    #[test]
+    fn test_get_file_handler() {
+        let file_path: &str = "sample.csv";
+        let result: fs::File = get_file_handler(file_path).unwrap();
+        assert_eq!(result.metadata().unwrap().len(), 1077);
+    }
+
+    #[test]
+    fn test_get_file_handler_with_non_existent_file() {
+        let file_path: &str = "non_existent_file.csv";
+        let result: Result<fs::File,Box<dyn Error>> = get_file_handler(file_path);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_get_file_handler_with_empty_string() {
+        let file_path: &str = "";
+        let _result: fs::File = get_file_handler(file_path).unwrap();
+    }
+
 }
