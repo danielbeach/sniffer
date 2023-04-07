@@ -1,4 +1,38 @@
 use std::{fs, io::BufReader, error::Error};
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[command(name = "sniffer")]
+#[command(author = "Daniel Beach")]
+#[command(version = "1.0")]
+#[command(about = "sniffs flat files", long_about = None)]
+pub struct Args {
+    #[arg(long)]
+    pub file_path: String,
+
+    #[arg(long)]
+    pub delimiter: String,
+
+    #[arg(long, default_value_t = 0)]
+    pub quote: u32,
+
+    #[arg(long, default_value_t = 1)]
+    pub check_nulls: u32,
+
+    #[arg(long, default_value_t = 1)]
+    pub check_whitespace: u32,
+}
+
+impl Args {
+    pub fn new() -> Self {
+        Self::parse()
+    }
+}
+    
+
+
+
+
 
 pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     let metadata: fs::Metadata = fs::metadata(file_path).expect("Error reading file metadata");
