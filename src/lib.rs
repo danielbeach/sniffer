@@ -1,4 +1,4 @@
-use std::{fs, io::BufReader};
+use std::{fs, io::BufReader, error::Error};
 
 pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     let metadata: fs::Metadata = fs::metadata(file_path).expect("Error reading file metadata");
@@ -75,7 +75,7 @@ pub fn check_all_column_for_nulls_and_whitespace(file_path: &str, delimiter: &st
 }
 
 pub fn print_headers_few_lines_and_line_count(file_path: &str, delimiter: &str, &quote: &u32) {
-    let file: fs::File = std::fs::File::open(file_path).unwrap();
+    let file = get_file_handler(file_path).unwrap();
     let bf: BufReader<fs::File> = BufReader::new(file);
     let mut rdr = csv::ReaderBuilder::new()
         .delimiter(if delimiter == "," { b',' } else { b'\t' })
@@ -97,6 +97,20 @@ pub fn print_headers_few_lines_and_line_count(file_path: &str, delimiter: &str, 
         count += 1;
     }
     println!("number of lines: {}", count);
+}
+
+// get file handler
+//
+// # Arguments
+//
+// * `file_path` - A string slice that is the path to the file
+//
+// # Returns
+//
+// * `Result<fs::File,Box<dyn Error>>` - A result that is either a file handler or an error message
+fn get_file_handler(file_path: &str) -> Result<fs::File,Box<dyn Error>> {
+    let file: fs::File = fs::File::open(file_path)?;
+    Ok(file)
 }
 
 #[cfg(test)]
