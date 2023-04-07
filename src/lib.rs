@@ -1,4 +1,4 @@
-use std::{fs, io::BufReader};
+use std::{fs, io::BufReader, error::Error};
 
 pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     let metadata: fs::Metadata = fs::metadata(file_path).expect("Error reading file metadata");
@@ -75,7 +75,7 @@ pub fn check_all_column_for_nulls_and_whitespace(file_path: &str, delimiter: &st
 }
 
 pub fn print_headers_few_lines_and_line_count(file_path: &str, delimiter: &str, &quote: &u32) {
-    let file: fs::File = std::fs::File::open(file_path).unwrap();
+    let file = get_file_handler(file_path).unwrap();
     let bf: BufReader<fs::File> = BufReader::new(file);
     let mut rdr = csv::ReaderBuilder::new()
         .delimiter(if delimiter == "," { b',' } else { b'\t' })
@@ -97,6 +97,20 @@ pub fn print_headers_few_lines_and_line_count(file_path: &str, delimiter: &str, 
         count += 1;
     }
     println!("number of lines: {}", count);
+}
+
+// get file handler
+//
+// # Arguments
+//
+// * `file_path` - A string slice that is the path to the file
+//
+// # Returns
+//
+// * `Result<fs::File,Box<dyn Error>>` - A result that is either a file handler or an error message
+fn get_file_handler(file_path: &str) -> Result<fs::File,Box<dyn Error>> {
+    let file: fs::File = fs::File::open(file_path)?;
+    Ok(file)
 }
 
 #[cfg(test)]
@@ -137,4 +151,26 @@ mod tests {
         let result: bool = has_whitespace_at_beginning_or_end(s).unwrap();
         assert_eq!(result, false);
     }
+
+    #[test]
+    fn test_get_file_handler() {
+        let file_path: &str = "sample.csv";
+        let result: fs::File = get_file_handler(file_path).unwrap();
+        assert_eq!(result.metadata().unwrap().len(), 1077);
+    }
+
+    #[test]
+    fn test_get_file_handler_with_non_existent_file() {
+        let file_path: &str = "non_existent_file.csv";
+        let result: Result<fs::File,Box<dyn Error>> = get_file_handler(file_path);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_get_file_handler_with_empty_string() {
+        let file_path: &str = "";
+        let _result: fs::File = get_file_handler(file_path).unwrap();
+    }
+
 }
