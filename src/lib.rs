@@ -1,4 +1,59 @@
 use std::{fs, io::BufReader, error::Error};
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[command(name = "sniffer")]
+#[command(author = "Daniel Beach")]
+#[command(version = "1.0")]
+#[command(about = "sniffs flat files", long_about = None)]
+pub struct Args {
+    #[arg(long)]
+    file_path: String,
+
+    #[arg(long)]
+    delimiter: String,
+
+    #[arg(long, default_value_t = 0)]
+    quote: u32,
+
+    #[arg(long, default_value_t = 1)]
+    check_nulls: u32,
+
+    #[arg(long, default_value_t = 1)]
+    check_whitespace: u32,
+}
+
+impl Args {
+    pub fn new() -> Self {
+        Self::parse()
+    }
+
+    pub fn file_path(&self) -> &str {
+        &self.file_path
+    }
+
+    pub fn delimiter(&self) -> &str {
+        &self.delimiter
+    }
+
+    pub fn quote(&self) -> &u32 {
+        &self.quote
+    }
+
+    pub fn check_nulls(&self) -> &u32 {
+        &self.check_nulls
+    }
+
+    pub fn check_whitespace(&self) -> &u32 {
+        &self.check_whitespace
+    }
+    
+}
+    
+
+
+
+
 
 pub fn get_file_size_in_mb(file_path: &str) -> f64 {
     let metadata: fs::Metadata = fs::metadata(file_path).expect("Error reading file metadata");
@@ -34,12 +89,12 @@ fn has_whitespace_at_beginning_or_end(s: &str) -> Result<bool,&'static str> {
     Ok(false)
 }
 
-pub fn check_all_column_for_nulls_and_whitespace(file_path: &str, delimiter: &str, &quote: &u32, &check_whitespace: &u32) {
-    let file: fs::File = std::fs::File::open(file_path).unwrap();
+pub fn check_all_column_for_nulls_and_whitespace(args:&Args) {
+    let file: fs::File = std::fs::File::open(args.file_path()).unwrap();
     let bf: BufReader<fs::File> = BufReader::new(file);
     let mut rdr: csv::Reader<BufReader<fs::File>> = csv::ReaderBuilder::new()
-        .delimiter(if delimiter == "," { b',' } else { b'\t' })
-        .double_quote(match quote == 1 {
+        .delimiter(if args.delimiter() == "," { b',' } else { b'\t' })
+        .double_quote(match args.quote() == &1 {
             true => true,
             false => false,
         })
@@ -52,7 +107,7 @@ pub fn check_all_column_for_nulls_and_whitespace(file_path: &str, delimiter: &st
             if field.is_empty() {
                 columns_with_nulls.push(String::from(field));
             }
-            if check_whitespace == 1 {
+            if args.check_whitespace() == &1 {
                 if has_whitespace_at_beginning_or_end(field).unwrap() {
                     has_whitespace.push(true);
                 }
@@ -64,7 +119,7 @@ pub fn check_all_column_for_nulls_and_whitespace(file_path: &str, delimiter: &st
     } else {
         println!("No columns with nulls");
     }
-    if check_whitespace == 1 {
+    if args.check_whitespace() == &1 {
    
         if has_whitespace.len() > 0 {
             println!("Found columns with whitespace at beginning or end");
@@ -74,12 +129,12 @@ pub fn check_all_column_for_nulls_and_whitespace(file_path: &str, delimiter: &st
     }
 }
 
-pub fn print_headers_few_lines_and_line_count(file_path: &str, delimiter: &str, &quote: &u32) {
-    let file = get_file_handler(file_path).unwrap();
+pub fn print_headers_few_lines_and_line_count(args:&Args) {
+    let file = get_file_handler(args.file_path()).unwrap();
     let bf: BufReader<fs::File> = BufReader::new(file);
     let mut rdr = csv::ReaderBuilder::new()
-        .delimiter(if delimiter == "," { b',' } else { b'\t' })
-        .double_quote(match quote == 1 {
+        .delimiter(if args.delimiter() == "," { b',' } else { b'\t' })
+        .double_quote(match args.quote() == &1 {
             true => true,
             false => false,
         })
