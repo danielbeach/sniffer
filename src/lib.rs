@@ -8,25 +8,46 @@ use clap::Parser;
 #[command(about = "sniffs flat files", long_about = None)]
 pub struct Args {
     #[arg(long)]
-    pub file_path: String,
+    file_path: String,
 
     #[arg(long)]
-    pub delimiter: String,
+    delimiter: String,
 
     #[arg(long, default_value_t = 0)]
-    pub quote: u32,
+    quote: u32,
 
     #[arg(long, default_value_t = 1)]
-    pub check_nulls: u32,
+    check_nulls: u32,
 
     #[arg(long, default_value_t = 1)]
-    pub check_whitespace: u32,
+    check_whitespace: u32,
 }
 
 impl Args {
     pub fn new() -> Self {
         Self::parse()
     }
+
+    pub fn file_path(&self) -> &str {
+        &self.file_path
+    }
+
+    pub fn delimiter(&self) -> &str {
+        &self.delimiter
+    }
+
+    pub fn quote(&self) -> &u32 {
+        &self.quote
+    }
+
+    pub fn check_nulls(&self) -> &u32 {
+        &self.check_nulls
+    }
+
+    pub fn check_whitespace(&self) -> &u32 {
+        &self.check_whitespace
+    }
+    
 }
     
 
