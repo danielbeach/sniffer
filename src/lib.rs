@@ -186,7 +186,7 @@ mod tests {
     fn remove_file_after_testing() -> ()
     {
         let file_path: String = String::from(TEST_FILE_NAME);
-        fs::remove_file(file_path);
+        fs::remove_file(file_path).unwrap();
     }
 
     #[test]
