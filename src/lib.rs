@@ -171,6 +171,23 @@ fn get_file_handler(file_path: &str) -> Result<fs::File,Box<dyn Error>> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    const TEST_FILE_NAME: &str = "test.csv";
+
+    fn create_csv_file_for_testing() -> String {
+        let file_path: String = String::from(TEST_FILE_NAME);
+        let mut wtr = csv::Writer::from_path(file_path.clone()).unwrap();
+        wtr.write_record(&["a", "b", "c"]).unwrap();
+        wtr.write_record(&["1", "2", "3"]).unwrap();
+        wtr.write_record(&["4", "5", "6"]).unwrap();
+        wtr.flush().unwrap();
+        file_path
+    }
+
+    fn remove_file_after_testing() -> ()
+    {
+        let file_path: String = String::from(TEST_FILE_NAME);
+        fs::remove_file(file_path);
+    }
 
     #[test]
     fn test_has_whitespace_at_beginning_or_end_with_leading_space() {
@@ -209,9 +226,10 @@ mod tests {
 
     #[test]
     fn test_get_file_handler() {
-        let file_path: &str = "sample.csv";
-        let result: fs::File = get_file_handler(file_path).unwrap();
-        assert_eq!(result.metadata().unwrap().len(), 1077);
+        let file_path: String = create_csv_file_for_testing();
+        let result: fs::File = get_file_handler(&file_path).unwrap();
+        assert_eq!(result.metadata().unwrap().len(), 18);
+        remove_file_after_testing();
     }
 
     #[test]
