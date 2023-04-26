@@ -54,23 +54,31 @@ impl Args {
 
 
 
-
-pub fn get_file_size_in_mb(file_path: &str) -> f64 {
-    let metadata: fs::Metadata = fs::metadata(file_path).expect("Error reading file metadata");
+/// Get a file size in MB
+/// 
+/// # Arguments
+/// 
+/// * `file_path` - A string slice that holds the path to the file
+/// 
+/// # Returns
+/// Result<f64, Box<dyn Error>> - A result that is either a file size  or an error message
+/// 
+pub fn get_file_size_in_mb(file_path: &str) -> Result<f64, Box<dyn Error>> {
+    let metadata: fs::Metadata = fs::metadata(file_path)?;
     let file_size: f64 = metadata.len() as f64;
     let mb_size: f64 = file_size / (1024.0 * 1024.0);
-    mb_size
+    Ok(mb_size)
 }
 
-// check whitespace at beginning or end of string
-// 
-// # Arguments
-//
-// * `s` - A string slice that we want to check for whitespace at beginning or end
-//
-// # Returns
-//
-// * `Result<bool, &'static str>` - A result that is either a boolean or an error message
+/// check whitespace at beginning or end of string
+/// 
+/// # Arguments
+///
+///  * `s` - A string slice that we want to check for whitespace at beginning or end
+///
+///  # Returns
+///
+/// * `Result<bool, &'static str>` - A result that is either a boolean or an error message
 fn has_whitespace_at_beginning_or_end(s: &str) -> Result<bool,&'static str> {
 
     if s.len() == 0 {
