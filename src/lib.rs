@@ -7,19 +7,19 @@ use clap::Parser;
 #[command(version = "1.0")]
 #[command(about = "sniffs flat files", long_about = None)]
 pub struct Args {
-    #[arg(long)]
+    #[arg(long, short='f')]
     file_path: String,
 
-    #[arg(long)]
+    #[arg(long, short='d')]
     delimiter: String,
 
-    #[arg(long, default_value_t = 0)]
+    #[arg(long,short='q', default_value_t = 1)]
     quote: u32,
 
-    #[arg(long, default_value_t = 1)]
+    #[arg(long, short='n', default_value_t = 1)]
     check_nulls: u32,
 
-    #[arg(long, default_value_t = 1)]
+    #[arg(long, short='w', default_value_t = 1)]
     check_whitespace: u32,
 }
 
