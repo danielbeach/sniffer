@@ -61,7 +61,7 @@ impl Args {
 /// * `file_path` - A string slice that holds the path to the file
 /// 
 /// # Returns
-/// Result<f64, Box<dyn Error>> - A result that is either a file size  or an error message
+/// * Result<f64, Box<dyn Error>> - A result that is either a file size  or an error message
 /// 
 pub fn get_file_size_in_mb(file_path: &str) -> Result<f64, Box<dyn Error>> {
     let metadata: fs::Metadata = fs::metadata(file_path)?;
