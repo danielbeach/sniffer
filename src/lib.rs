@@ -13,7 +13,7 @@ pub struct Args {
     #[arg(long, short='d')]
     delimiter: String,
 
-    #[arg(long,short='q', default_value_t = 1)]
+    #[arg(long,short='q', default_value_t = 0)]
     quote: u32,
 
     #[arg(long, short='n', default_value_t = 1)]
