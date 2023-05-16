@@ -263,4 +263,17 @@ mod tests {
         let _result: fs::File = get_file_handler(file_path).unwrap();
     }
 
+    #[test]
+    fn test_delimiter_without_default_is_tab() {
+        let args: Args = Args::parse_from(&["sniffer", "-f", "test.csv", "-d", "\t"]);
+        let result: &str = args.delimiter();
+        assert_eq!(result, "\t");
+    }
+
+    #[test]
+    fn test_delimiter_with_default_is_comma() {
+        let args: Args = Args::parse_from(&["sniffer", "-f", "test.csv"]);
+        let result: &str = args.delimiter();
+        assert_eq!(result, ",");
+    }
 }
