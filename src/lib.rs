@@ -10,7 +10,7 @@ pub struct Args {
     #[arg(long, short='f')]
     file_path: String,
 
-    #[arg(long, short='d')]
+    #[arg(long, short='d', default_value_t = String::from(","))]
     delimiter: String,
 
     #[arg(long,short='q', default_value_t = 0)]
@@ -98,10 +98,19 @@ fn has_whitespace_at_beginning_or_end(s: &str) -> Result<bool,&'static str> {
 }
 
 pub fn check_all_column_for_nulls_and_whitespace(args:&Args) {
-    let file: fs::File = std::fs::File::open(args.file_path()).unwrap();
+    let file: fs::File = get_file_handler(args.file_path()).unwrap();
     let bf: BufReader<fs::File> = BufReader::new(file);
+
+    // get delimiter byte
+    // Allow support for future delimiters 
+    let delimiter_byte = match args.delimiter() {
+        "," => b',',
+        "\t" => b'\t',
+        _ => b',',
+    };
+    
     let mut rdr: csv::Reader<BufReader<fs::File>> = csv::ReaderBuilder::new()
-        .delimiter(if args.delimiter() == "," { b',' } else { b'\t' })
+        .delimiter( delimiter_byte )
         .double_quote(match args.quote() == &1 {
             true => true,
             false => false,
