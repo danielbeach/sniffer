@@ -36,8 +36,12 @@ impl Args {
         &self.delimiter
     }
 
-    pub fn quote(&self) -> &u32 {
-        &self.quote
+    pub fn quote(&self) -> bool {
+        if &self.quote == &1 {
+            return true
+        } 
+
+        false
     }
 
     pub fn check_nulls(&self) -> &u32 {
@@ -111,10 +115,7 @@ pub fn check_all_column_for_nulls_and_whitespace(args:&Args) {
     
     let mut rdr: csv::Reader<BufReader<fs::File>> = csv::ReaderBuilder::new()
         .delimiter( delimiter_byte )
-        .double_quote(match args.quote() == &1 {
-            true => true,
-            false => false,
-        })
+        .double_quote(args.quote())
         .from_reader(bf);
     let mut columns_with_nulls: Vec<String> = Vec::new();
     let mut has_whitespace: Vec<bool> = Vec::new();
@@ -151,10 +152,7 @@ pub fn print_headers_few_lines_and_line_count(args:&Args) {
     let bf: BufReader<fs::File> = BufReader::new(file);
     let mut rdr = csv::ReaderBuilder::new()
         .delimiter(if args.delimiter() == "," { b',' } else { b'\t' })
-        .double_quote(match args.quote() == &1 {
-            true => true,
-            false => false,
-        })
+        .double_quote(args.quote())
         .from_reader(bf);
     let headers: &csv::StringRecord = rdr.headers().expect("Error reading headers");
     println!("Headers: {:?}", headers);
