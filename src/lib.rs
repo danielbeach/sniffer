@@ -274,4 +274,19 @@ mod tests {
         let result: &str = args.delimiter();
         assert_eq!(result, ",");
     }
+
+    #[test]
+    fn test_quote_with_default_is_false() {
+        let args: Args = Args::parse_from(&["sniffer", "-f", "test.csv"]);
+        let result: bool = args.quote();
+        assert_eq!(result, false);
+    }
+
+    #[test]
+    fn test_quote_with_true_is_true() {
+        let args: Args = Args::parse_from(&["sniffer", "-f", "test.csv", "-q", "1"]);
+        let result: bool = args.quote();
+        assert_eq!(result, true);
+    }
+
 }
