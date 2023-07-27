@@ -27,6 +27,8 @@ The follow data is displayed about a `flat file` by default.
 Usage: sniffer [OPTIONS] --file-path <FILE_PATH> --delimiter <DELIMITER>
 
 Options:
+      --delta <1 or 0> [default 0]
+      --delta_path <DELTA_PATH>
       --file-path <FILE_PATH>
       --delimiter <DELIMITER>
       --quote <QUOTE>          [default: 0]
@@ -54,6 +56,10 @@ No columns with nulls
 No columns with whitespace at beginning or end
 File size in MB: 0.001027107238769531
 ```
+
+Want to convert you `CSV` file into a Delta Table? No problem. Simple pass `--delta 1 --delta-path some/location/`
+and a new Delta Table will be create from your `CSV`` file. Here is an example command
+`cargo run -- --delta 1 --delta-path "delta_example" --file-path "sample.csv"`
 
 ## Testing and CI, Building.
 To run `pre-commit` checks ...

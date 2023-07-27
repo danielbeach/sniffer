@@ -1,5 +1,16 @@
 use std::{fs, io::BufReader, error::Error};
 use clap::Parser;
+// import CreateBuilder
+use deltalake::operations::create::CreateBuilder;
+use deltalake::DeltaTable;
+use deltalake::schema::SchemaField;
+use deltalake::schema::SchemaDataType;
+use deltalake::writer::json::JsonWriter;
+use deltalake::writer::DeltaWriter;
+use serde_json::json;
+use csv;
+use serde_json::Value;
+
 
 #[derive(Parser, Debug)]
 #[command(name = "sniffer")]
@@ -7,6 +18,12 @@ use clap::Parser;
 #[command(version = "1.0")]
 #[command(about = "sniffs flat files", long_about = None)]
 pub struct Args {
+    #[arg(long, short='t', default_value_t = 0)]
+    delta: u16,
+
+    #[arg(long, short='p', default_value_t =  String::from("./delta"))]
+    delta_path: String,
+
     #[arg(long, short='f')]
     file_path: String,
 
@@ -30,6 +47,14 @@ impl Args {
 
     pub fn file_path(&self) -> &str {
         &self.file_path
+    }
+
+    pub fn delta(&self) -> &u16 {
+        &self.delta
+    }
+
+    pub fn delta_path(&self) -> &str {
+        &self.delta_path
     }
 
     pub fn delimiter(&self) -> &str {
@@ -182,6 +207,46 @@ fn get_file_handler(file_path: &str) -> Result<fs::File,Box<dyn Error>> {
     let file: fs::File = fs::File::open(file_path)?;
     Ok(file)
 }
+
+pub async fn convert_csv_to_delta_lake(args:&Args) {
+    let file = get_file_handler(args.file_path()).unwrap();
+    let bf: BufReader<fs::File> = BufReader::new(file);
+    let mut rdr = csv::ReaderBuilder::new()
+        .delimiter(if args.delimiter() == "," { b',' } else { b'\t' })
+        .double_quote(args.quote())
+        .from_reader(bf);
+    let mut schema_fields: Vec<SchemaField> = Vec::new();
+
+    let headers: &csv::StringRecord = rdr.headers().expect("Error reading headers");
+    for header in headers.iter() {
+        schema_fields.push(SchemaField::new(header.to_string(), 
+        SchemaDataType::primitive("string".to_string()), true, Default::default()));
+    }
+    let mut table: DeltaTable = CreateBuilder::new().with_location(args.delta_path()).with_columns(schema_fields).await.unwrap();
+    let mut wrtr = JsonWriter::for_table(&table).unwrap();
+    let mut reader = csv::Reader::from_path(args.file_path()).unwrap();
+    let mut map: serde_json::Map<String,Value> = serde_json::Map::new();
+
+    for result in reader.records() {
+        let record: csv::StringRecord = result.unwrap();
+        let mut values = Vec::new();
+        for (i, field) in record.iter().enumerate() {
+            map.insert(headers[i].to_string(), json!(field));
+        }
+        values.push(json!(map));
+        println!("values: {:?}", values);
+        wrtr.write(values).await.unwrap();
+    }
+
+    wrtr.flush_and_commit(&mut table).await.unwrap();
+    println!("Done writing CSV to Delta Lake at {}", args.delta_path());
+    
+}
+    
+
+
+
+
 
 #[cfg(test)]
 mod tests {

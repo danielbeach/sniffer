@@ -2,11 +2,16 @@ use std::process;
 
 use sniffer::*;
 
+#[tokio::main]
 
-fn main() {
+async fn main() {
     let args:Args = Args::new();
 
     sniffer::print_headers_few_lines_and_line_count(&args);
+
+    if args.delta() == &1 {
+        sniffer::convert_csv_to_delta_lake(&args).await;
+    }
     
     if args.check_nulls() == &1 {
         sniffer::check_all_column_for_nulls_and_whitespace(&args);
