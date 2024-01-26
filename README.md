@@ -11,17 +11,17 @@ Want to see the first few rows printed out to your terminal?
 Then `sniffer` is for you!
 
 `sniffer` is built with `Rust` and is made for the average
-Data Engineering or data person who frequently need to inspect
+Data Engineering or data person who frequently needs to inspect
 `csv` files quicky.
 
-The follow data is displayed about a `flat file` by default.
+The following data is displayed about a `flat file` by default.
 - file size in `mb`.
 - number of `lines` per file.
 - `header` row is displayed.
 - First few `rows` are printed.
-- Option to indciate of flat-file is quoted.
+- Option to indciate if flat-file is quoted.
 - Option to check all columns for `NULL` values.
-- Option to check for whitespace and beginning and end of columns.
+- Option to check for whitespace at the beginning and end of columns.
 
 ### Usage
 ```
@@ -39,7 +39,7 @@ Options:
   -V, --version                Print version
   ```
 
-To use `sniffer` to inspect a `flat-file`
+To use `sniffer` to inspect a `flat-file`,
 simply pass the `file-path` and `delimiter`.
 `cargo run -- --file-path sample.csv  --delimiter , --quote 1 --check-nulls 1`
 This will give you output something like ...
@@ -60,8 +60,8 @@ File size in MB: 0.001027107238769531
 
 Want to convert your `CSV` file into a Delta Table? 
 
-No problem. Simple pass `--delta 1 --delta-path some/location/`
-and a new Delta Table will be create from your `CSV` file. 
+No problem. Simply pass `--delta 1 --delta-path some/location/`
+and a new Delta Table will be created from your `CSV` file. 
 
 Here is an example command
 
